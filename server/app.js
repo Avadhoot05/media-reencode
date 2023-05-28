@@ -4,7 +4,8 @@ import cors from 'cors';
 import bodyParser from "body-parser";
 import router from "./routes.js";
 import dotenv from 'dotenv';
-import { Processor, Job } from './encoder/processor.js';
+
+import { Processor, Job } from './encoder/Processor.js';
 import { fileURLToPath } from 'url';
 
 import path from 'path';
@@ -26,6 +27,15 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 app.use('/', router);
 
 const port =  process.env.PORT;
+
+if (process.env.NODE_ENV == "production") {
+  app.use(express.static(path.join(__dirname, "client" , "build")));
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  })
+}
+
 app.listen(port, () => {
     console.log(`Server is running at ${port}`);
   });

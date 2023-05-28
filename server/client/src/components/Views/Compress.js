@@ -117,7 +117,7 @@ function Compress({wsClient}) {
 
                             <div style={{display: "flex"}}>
                                 <Typography id="slider-label" variant="body1">
-                                    Compression strength
+                                    Compression strength: {compressValue}%
                                 </Typography> 
                                 <Tooltip title="Higher value indicates stronger compression, but potentially lower quality. 
                                                 The recommended compression strength is 20.">
