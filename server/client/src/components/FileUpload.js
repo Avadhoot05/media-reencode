@@ -12,12 +12,12 @@ function FileUpload({onChangeHandler}) {
         const file = e.target.files[0];
         console.log("size", BytesToMB(file.size));
         
-        // if(BytesToMB(file.size) > 200)
-        // {
-        //     toast.warn("file exceeded 200MB");
-        //     e.target.value = null;
-        //     return;
-        // }
+        if(BytesToMB(file.size) > 200)
+        {
+            toast.warn("file exceeded 200MB");
+            e.target.value = null;
+            return;
+        }
             
         onChangeHandler(e);
     }
