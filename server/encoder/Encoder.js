@@ -2,6 +2,7 @@ import ffmpeg from 'fluent-ffmpeg';
 import ffmpegPath from '@ffmpeg-installer/ffmpeg';
 import { ACTION, Job } from './processor.js';
 import path from 'path';
+import { map } from '../constant.js';
 
 export class Encoder
 {
@@ -16,16 +17,23 @@ export class Encoder
      * @param {Job} job 
      * @param {*} onComplete 
      */
-    Encode(job, onComplete)
+    Encode(job, onComplete, onProgress)
     {
         let action = job.GetAction();
+        console.log("switch", action);
         switch(action)
         {
             case ACTION.FPS:
-                this.EncodeFPS(job, onComplete);
+                this.EncodeFPS(job, onComplete, onProgress);
                 break;
             case ACTION.RESOLUTION:
-                this.EncodeResolution(job, onComplete);
+                this.EncodeResolution(job, onComplete, onProgress);
+                break;
+            case ACTION.FORMAT:
+                this.EncodeFormat(job, onComplete, onProgress);
+                break;
+            case ACTION.COMPRESS:
+                this.Compress(job, onComplete, onProgress);
                 break;
         }
     }
@@ -35,7 +43,7 @@ export class Encoder
      * @param {Job} job 
      * @param {*} onComplete 
      */
-    EncodeFPS(job, onComplete)
+    EncodeFPS(job, onComplete, onProgress)
     {
         let fileNameWithOriginalFormat = job.GetFileNameWithOriginalFormat();
         let actionParam =  job.GetActionParam();
@@ -53,11 +61,10 @@ export class Encoder
         .videoCodec("libx264")
         .fps(fps)
         .on("error", function(err){
-            console.log(err);
             onComplete(null, err);
         })
-        .on("progess", function(progress){
-            console.log(progress);
+        .on("progress", function(progress){
+            onProgress(progress.percent);
         })
         .on("end", function(){
             onComplete({
@@ -67,8 +74,119 @@ export class Encoder
         .run();
     }
 
-    EncodeResolution()
+    /**
+     * 
+     * @param {Job} job 
+     * @param {Function} onComplete 
+     * @param {Function} onProgress 
+     */
+    EncodeResolution(job, onComplete, onProgress)
     {
-        //TODO:: code resolution change
+        let fileNameWithOriginalFormat = job.GetFileNameWithOriginalFormat();
+        let actionParam =  job.GetActionParam();
+        let res = actionParam["RESOLUTION"];
+        console.log("[RESOLUTION] value ", res);
+        
+        let strFilePathToProcess = path.join('./public', 'uploaded', fileNameWithOriginalFormat);        
+        console.log("[RESOLUTION] uploaded file ", strFilePathToProcess);
+
+        let strOutputFilePath = path.join('./public', 'reencoded', fileNameWithOriginalFormat);
+        console.log("[FPS] output file ", strOutputFilePath);
+
+        ffmpeg(strFilePathToProcess)
+        .output(strOutputFilePath)
+        .videoCodec("libx264")
+        .size(`${res.width}x${res.height}`)
+        .on("error", function(err){
+            onComplete(null, err);
+        })
+        .on("progress", function(progress){
+            onProgress(progress.percent);
+        })
+        .on("end", function(){
+            onComplete({
+                "strOutputFilePath": strOutputFilePath
+            }, null);
+        })
+        .run();
+    }
+
+    /**
+     * 
+     * @param {Job} job 
+     * @param {*} onComplete 
+     * @param {*} onProgress 
+     */
+    EncodeFormat(job, onComplete, onProgress)
+    {
+        let actionParam =  job.GetActionParam();
+        let newFormat = actionParam["FORMAT"];
+        console.log("[Format] value ", newFormat);
+
+        let fileNameWithOriginalFormat = job.GetFileNameWithOriginalFormat();
+        let fileNameWithNewFormat = job.GetFileName() + "." + newFormat;
+        
+        let strFilePathToProcess = path.join('./public', 'uploaded', fileNameWithOriginalFormat);        
+        console.log("[Format] uploaded file ", strFilePathToProcess);
+
+        let strOutputFilePath = path.join('./public', 'reencoded', fileNameWithNewFormat);
+        console.log("[Format] output file ", strOutputFilePath);
+
+        
+        ffmpeg(strFilePathToProcess)
+        .output(strOutputFilePath)
+        .videoCodec("libx264")
+        .on("error", function(err){
+            onComplete(null, err);
+        })
+        .on("progress", function(progress){
+            onProgress(progress.percent);
+        })
+        .on("end", function(){
+            onComplete({
+                "strOutputFilePath": strOutputFilePath
+            }, null);
+        })
+        .run();
+    }
+
+    /**
+     * 
+     * @param {Job} job 
+     * @param {*} onComplete 
+     * @param {*} onProgress 
+     */
+    Compress(job, onComplete, onProgress)
+    {
+        let actionParam =  job.GetActionParam();
+        let uSliderCompressValue = actionParam["COMPRESS_VAL"];
+        console.log("[Compress] value ", uSliderCompressValue);
+
+        let crfCommand = "-crf " + Math.ceil(map(uSliderCompressValue, 0, 100, 15, 51));  
+        console.log("[Compress] crf commad ", crfCommand);
+        let fileNameWithOriginalFormat = job.GetFileNameWithOriginalFormat();
+        
+        let strFilePathToProcess = path.join('./public', 'uploaded', fileNameWithOriginalFormat);        
+        console.log("[RESOLUTION] uploaded file ", strFilePathToProcess);
+
+        let strOutputFilePath = path.join('./public', 'reencoded', fileNameWithOriginalFormat);
+        console.log("[FPS] output file ", strOutputFilePath);
+
+        ffmpeg(strFilePathToProcess)
+        .output(strOutputFilePath)
+        .videoCodec("libx264")
+        .withOutputOption(crfCommand)
+        .on("error", function(err){
+            onComplete(null, err);
+        })
+        .on("progress", function(progress){
+            onProgress(progress.percent);
+        })
+        .on("end", function(){
+            onComplete({
+                "strOutputFilePath": strOutputFilePath
+            }, null);
+        })
+        .run();
     }
 }

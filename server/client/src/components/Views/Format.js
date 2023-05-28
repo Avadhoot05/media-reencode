@@ -9,13 +9,14 @@ import { FormControl, InputLabel, MenuItem, Select,FormHelperText  } from '@mui/
 import { GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
+import BackButton from '../BackButton';
 
-function Resolution({wsClient}) {
-    console.log("Resolution")
-    const arrResolution = [{1: '320x240 (240p)'}, {2: '640x360 (360p)'}, {3: '640x480 (480p)'}, {4: '1280x720 (720p)'}, {5: '1920x1080 (1080p)'}];
+//3gp-0, mp4-1, mov-1, flv-1, mkv-1, avi, webm-0, 
+function Format({wsClient}) {
+    console.log("format")
+    const arrFormat = [/*{1: '3gp'}*/ , {2: 'mp4'}, {3: 'mov'}, {4: 'flv'},{5: 'mkv'},{6: 'avi'}, /*{7: 'webm'}*/];
 
-
-    const [selectedResolution, setSelectedResolution] = useState("");
+    const [selectedFormat, setSelectedFormat] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
     const [strErrorText, setErrorText] = useState('');
     
@@ -30,39 +31,9 @@ function Resolution({wsClient}) {
 
         if(response)
         {
-            let action = 2;
-            let param;
-            console.log("send ws", selectedResolution);
-            
-            if(selectedResolution === 1)
-            {
-                console.log("240p")
-                param = {width: 320, height: 240};
-            }
-            else if(selectedResolution === 2)
-            {
-                console.log("360p")
-                param = {width: 640, height: 360};
-            }
-            else if(selectedResolution === 3)
-            {
-                console.log("480p")
-                param = {width: 640, height: 480};
-            }
-            else if(selectedResolution === 4)
-            {
-                console.log("720p")
-                param = {width: 1280, height: 720};
-            }
-            else if(selectedResolution === 5)
-            {
-                console.log("180p")
-                param = {width: 1920, height: 1080};
-            }
-             
-            
-	        let actionParam = {"RESOLUTION": param};
-            console.log(actionParam);
+            let action = 3;
+	        let actionParam = {"FORMAT": selectedFormat};
+
             wsClient.send(JSON.stringify({
 				type: "enque",
 				newUploadedFileName: response.data.newUploadedFileName, 
@@ -102,23 +73,31 @@ function Resolution({wsClient}) {
         }
     };
 
-    const handleResolutionChange = e => {
+    const handleFormatChange = (event) => {
         setErrorText("");
-        setSelectedResolution(e.target.value)
+        setSelectedFormat(event.target.value);
+
+        if(selectedFile && event.target.value.toLowerCase() == GetFileExt(selectedFile.name, false).toLowerCase())
+            setErrorText("file is already in selected file format");
     };
 
     const HandleFileChange = e => {
+        
         setErrorText("");
         setSelectedFile(e.target.files[0]);
+
+        console.log(selectedFormat.toLowerCase(), GetFileExt(e.target.files[0].name, false).toLowerCase());
+        if(selectedFormat.toLowerCase() == GetFileExt(e.target.files[0].name, false).toLowerCase())
+            setErrorText("file is already in selected file format");
     }
 
     const HandleFormSubmit = e => {
-        console.log(selectedResolution);
+        console.log(selectedFormat);
         e.preventDefault();
         setVideoPath("");
         setCompletionPercent(0);
         setProcessing(true);
-
+       
         let formData = new FormData();
         formData.append("video", selectedFile);
         formData.append("format", GetFileExt(selectedFile.name, true));
@@ -126,10 +105,10 @@ function Resolution({wsClient}) {
     }
 
     const GetMenuItems = () => {
-        return arrResolution.map(res => {
-            let k = Object.keys(res)[0];
-            let val = res[k];
-            return <MenuItem key={k} value={k}>{val}</MenuItem>
+        return arrFormat.map(format => {
+            let k = Object.keys(format)[0];
+            let val = format[k];
+            return <MenuItem key={k} value={val}>{val.toUpperCase()}</MenuItem>
         });
     }
 
@@ -150,8 +129,8 @@ function Resolution({wsClient}) {
                     height="100vh"
                 >
                     <PageHeading
-                        heading="Video Resolution Reencoding"
-                        description= "Change the video to desired resolutions, enhancing visual quality for an enhanced viewing experience."
+                        heading="Video Format Reencoding"
+                        description= "Reencode video files by modifying the file format."
                     />
                     <form onSubmit={HandleFormSubmit}>
                         <Box 
@@ -167,11 +146,11 @@ function Resolution({wsClient}) {
                                 error={!!strErrorText} 
                                 style={{ width: '100%', margin: "15px 0" }}
                             >
-                                <InputLabel id="format-label">Select Resolution</InputLabel>
+                                <InputLabel id="format-label">Select Format</InputLabel>
                                 <Select
                                     labelId="format-label"
-                                    value={selectedResolution}
-                                    onChange={handleResolutionChange}
+                                    value={selectedFormat}
+                                    onChange={handleFormatChange}
                                 >
                                 {
                                     GetMenuItems()
@@ -184,12 +163,14 @@ function Resolution({wsClient}) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary"
-                                disabled={strErrorText !== "" || selectedFile === null || selectedResolution === ""}
+                                disabled={strErrorText !== "" || selectedFile === null || selectedFormat === ""}
                             >
                                 upload
                             </Button>
+                            <BackButton/>
                         </Box>
                     </form>
+                    
                 </Box>
             )
         }
@@ -197,4 +178,4 @@ function Resolution({wsClient}) {
   )
 }
 
-export default Resolution;
+export default Format

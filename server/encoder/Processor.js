@@ -3,7 +3,10 @@ import { Encoder } from "./encoder.js";
 
 export const ACTION = Object.freeze({
     NONE: 0, 
-    FPS: 1
+    FPS: 1,
+    RESOLUTION: 2, 
+    FORMAT: 3, 
+    COMPRESS: 4
 });
 
 export class Job
@@ -96,7 +99,7 @@ export class Processor
             let resp;
             if(err)
             {
-                console.log("error" ,  job.GetFileName());
+                console.log("error" , err,  job.GetFileName());
                 resp = {
                     "type": "reencodeResponse",
                     "bSuccess": false,
@@ -117,6 +120,15 @@ export class Processor
             connection.send(JSON.stringify(resp));
             this.ProcessJobs();
 
+        }, 
+        
+        (percent) => {
+            let resp = {
+                "type": "reencodeProgress", 
+                "percent": percent,
+            };
+
+            connection.send(JSON.stringify(resp));
         });
 
 

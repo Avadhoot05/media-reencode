@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function usePost({url, config}) {
     const [response, setResponse] = useState(null);
@@ -13,15 +13,22 @@ function usePost({url, config}) {
 
         try {
             let response = await axios.post(url, data, config);
-            if(response.status == 200)
+            if(response.status === 200)
+            {
+                setLoading(false);
                 setResponse(response);
+            }
             else 
+            {
+                setLoading(false);
                 setError(true);
-        } catch (err) {
+            }
+        } 
+        catch (err) 
+        {
+            setLoading(false);
             setError(true);
         }
-        
-        setLoading(false);
     }
 
     return [response, error, loading, makeRequest];
