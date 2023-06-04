@@ -4,6 +4,8 @@ const ffmpegPath = require("@ffmpeg-installer/ffmpeg");
 const mapFn  = require("../constant.js").mapFn;
 const ACTION = require("../constant.js").ACTION;
 const  Job  = require("./Processor.js").Job;
+const path = require("path");
+
 
 
 class Encoder

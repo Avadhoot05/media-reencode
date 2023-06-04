@@ -1,5 +1,6 @@
 const multer =  require("multer");
 const MEDIA_NAME_PREFIX = require("../constant.js").MEDIA_NAME_PREFIX;
+const path = require("path");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) 
