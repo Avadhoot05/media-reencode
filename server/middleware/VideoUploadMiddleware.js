@@ -1,10 +1,26 @@
 const multer =  require("multer");
 const MEDIA_NAME_PREFIX = require("../constant.js").MEDIA_NAME_PREFIX;
 const path = require("path");
+const fs = require("fs");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) 
     {
+        if (!fs.existsSync("public")) {
+            fs.mkdirSync("public");
+          }
+      
+        if (!fs.existsSync("public/uploaded")) {
+            fs.mkdirSync("public/uploaded");
+        }
+
+        if (!fs.existsSync("public")) {
+            fs.mkdirSync("public");
+          }
+      
+        if (!fs.existsSync("public/reencoded")) {
+            fs.mkdirSync("public/reencoded");
+        }
     	cb(null, './public/uploaded')
     },
 
