@@ -1,10 +1,12 @@
-import ffmpeg from 'fluent-ffmpeg';
-import ffmpegPath from '@ffmpeg-installer/ffmpeg';
-import { ACTION, Job } from './processor.js';
-import path from 'path';
-import { map } from '../constant.js';
 
-export class Encoder
+const ffmpeg = require("fluent-ffmpeg");
+const ffmpegPath = require("@ffmpeg-installer/ffmpeg");
+const mapFn  = require("../constant.js").mapFn;
+const ACTION = require("../constant.js").ACTION;
+const  Job  = require("./Processor.js").Job;
+
+
+class Encoder
 {
     constructor()
     {
@@ -162,7 +164,7 @@ export class Encoder
         let uSliderCompressValue = actionParam["COMPRESS_VAL"];
         console.log("[Compress] value ", uSliderCompressValue);
 
-        let crfCommand = "-crf " + Math.ceil(map(uSliderCompressValue, 0, 100, 15, 51));  
+        let crfCommand = "-crf " + Math.ceil(mapFn(uSliderCompressValue, 0, 100, 15, 51));  
         console.log("[Compress] crf commad ", crfCommand);
         let fileNameWithOriginalFormat = job.GetFileNameWithOriginalFormat();
         
@@ -190,3 +192,5 @@ export class Encoder
         .run();
     }
 }
+
+module.exports = Encoder;

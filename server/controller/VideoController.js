@@ -1,8 +1,4 @@
-import ffmpeg from 'fluent-ffmpeg';
-import path from 'path';
-import ffmpegPath from '@ffmpeg-installer/ffmpeg';
- 
-export const VideoUpload =  (req,res) => {
+const VideoUpload =  (req,res) => {
 
     let {newUploadedFileName, uploadedFileFormat} = req.body;
     
@@ -45,3 +41,5 @@ export const VideoUpload =  (req,res) => {
       res.status(400).json(error);
     }
 }
+
+module.exports = VideoUpload;

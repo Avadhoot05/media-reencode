@@ -1,6 +1,5 @@
-import multer from 'multer';
-import path from 'path';
-import { MEDIA_NAME_PREFIX } from '../constant.js';
+const multer =  require("multer");
+const MEDIA_NAME_PREFIX = require("../constant.js").MEDIA_NAME_PREFIX;
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) 
@@ -20,7 +19,7 @@ var storage = multer.diskStorage({
   	}
 });
 
-export const upload = multer({ 
+const upload = multer({ 
     storage: storage, 
 
     fileFilter: function(req, file, cb) 
@@ -35,4 +34,6 @@ export const upload = multer({
         cb(null, true);
     }  
 })
+
+module.exports = upload;
 

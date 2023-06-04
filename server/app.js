@@ -1,20 +1,13 @@
-// import ffmpeg from 'fluent-ffmpeg';
-import express from 'express';
-import cors from 'cors';
-import bodyParser from "body-parser";
-import router from "./routes.js";
-import dotenv from 'dotenv';
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+const http = require("http");
+const webSocket = require("websocket");
+const router = require("./routes.js");
+const path = require('path');
+const {Job, Processor} = require("./encoder/Processor.js");
 
-import { Processor, Job } from './encoder/Processor.js';
-import { fileURLToPath } from 'url';
-
-import path from 'path';
-import http from 'http';
-import webSocket from 'websocket';
-
-const __filename = fileURLToPath(import.meta.url);
-
-const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());

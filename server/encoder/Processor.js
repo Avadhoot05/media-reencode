@@ -1,15 +1,6 @@
-import { Encoder } from "./encoder.js";
+const Encoder = require("./Encoder.js");
 
-
-export const ACTION = Object.freeze({
-    NONE: 0, 
-    FPS: 1,
-    RESOLUTION: 2, 
-    FORMAT: 3, 
-    COMPRESS: 4
-});
-
-export class Job
+class Job
 {
     constructor(fileName, originalFormat, connection, action, actionParam)
     {
@@ -48,7 +39,7 @@ export class Job
 
 }
 
-export class Processor
+class Processor
 {
     constructor()
     {
@@ -135,3 +126,7 @@ export class Processor
 
     }
 }
+
+module.exports = {
+    Job, Processor
+};
