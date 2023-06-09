@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.json());
 dotenv.config({ path: "./config.env" });
 
-app.use("/public", express.static(path.join(__dirname, "tmp")));
+app.use("/public", express.static(path.join(__dirname, "public")));
 app.use('/', router);
 
 const port =  process.env.PORT;

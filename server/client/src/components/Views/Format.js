@@ -6,7 +6,7 @@ import { Button, Box} from '@mui/material';
 import { FormControl, InputLabel, MenuItem, Select,FormHelperText  } from '@mui/material';
 
 
-import { GetFileExt, formDataConfig } from '../../constants';
+import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
 import BackButton from '../BackButton';
@@ -31,8 +31,8 @@ function Format({wsClient}) {
 
         if(response)
         {
-            let action = 3;
-	        let actionParam = {"FORMAT": selectedFormat};
+            const action = ACTION.FORMAT;
+	        const actionParam = {"FORMAT": selectedFormat};
 
             wsClient.send(JSON.stringify({
 				type: "enque",
@@ -119,6 +119,7 @@ function Format({wsClient}) {
                 <Result
                     percent = {completionPercent}
                     strVideoPath = {strVideoPath}
+                    action={ACTION.FORMAT}
                 />  
             ) : (
                 <Box

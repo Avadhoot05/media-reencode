@@ -12,3 +12,12 @@ export const GetFileExt = (strFileName, bWithPeriod) => {
 
     return bWithPeriod ? "." + ext : ext;
 }
+
+export const ACTION = {
+
+    FPS: 1,
+    RESOLUTION: 2,
+    FORMAT: 3,
+    COMPRESS: 4
+
+}

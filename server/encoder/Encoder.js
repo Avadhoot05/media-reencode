@@ -54,10 +54,10 @@ class Encoder
         let fps = actionParam["FPS"];
         console.log("[FPS] value ", fps);
         
-        let strFilePathToProcess = path.join('./tmp', 'uploaded', fileNameWithOriginalFormat);        
+        let strFilePathToProcess = path.join('./public', 'uploaded', fileNameWithOriginalFormat);        
         console.log("[FPS] uploaded file ", strFilePathToProcess);
 
-        let strOutputFilePath = path.join('./tmp', 'reencoded', fileNameWithOriginalFormat);
+        let strOutputFilePath = path.join('./public', 'reencoded', fileNameWithOriginalFormat);
         console.log("[FPS] output file ", strOutputFilePath);
         
         ffmpeg(strFilePathToProcess)
@@ -91,11 +91,11 @@ class Encoder
         let res = actionParam["RESOLUTION"];
         console.log("[RESOLUTION] value ", res);
         
-        let strFilePathToProcess = path.join('./tmp', 'uploaded', fileNameWithOriginalFormat);        
+        let strFilePathToProcess = path.join('./public', 'uploaded', fileNameWithOriginalFormat);        
         console.log("[RESOLUTION] uploaded file ", strFilePathToProcess);
 
-        let strOutputFilePath = path.join('./tmp', 'reencoded', fileNameWithOriginalFormat);
-        console.log("[FPS] output file ", strOutputFilePath);
+        let strOutputFilePath = path.join('./public', 'reencoded', fileNameWithOriginalFormat);
+        console.log("[RESOLUTION] output file ", strOutputFilePath);
 
         ffmpeg(strFilePathToProcess)
         .output(strOutputFilePath)
@@ -130,10 +130,10 @@ class Encoder
         let fileNameWithOriginalFormat = job.GetFileNameWithOriginalFormat();
         let fileNameWithNewFormat = job.GetFileName() + "." + newFormat;
         
-        let strFilePathToProcess = path.join('./tmp', 'uploaded', fileNameWithOriginalFormat);        
+        let strFilePathToProcess = path.join('./public', 'uploaded', fileNameWithOriginalFormat);        
         console.log("[Format] uploaded file ", strFilePathToProcess);
 
-        let strOutputFilePath = path.join('./tmp', 'reencoded', fileNameWithNewFormat);
+        let strOutputFilePath = path.join('./public', 'reencoded', fileNameWithNewFormat);
         console.log("[Format] output file ", strOutputFilePath);
 
         
@@ -170,11 +170,11 @@ class Encoder
         console.log("[Compress] crf commad ", crfCommand);
         let fileNameWithOriginalFormat = job.GetFileNameWithOriginalFormat();
         
-        let strFilePathToProcess = path.join('./tmp', 'uploaded', fileNameWithOriginalFormat);        
-        console.log("[RESOLUTION] uploaded file ", strFilePathToProcess);
+        let strFilePathToProcess = path.join('./public', 'uploaded', fileNameWithOriginalFormat);        
+        console.log("[Compress] uploaded file ", strFilePathToProcess);
 
-        let strOutputFilePath = path.join('./tmp', 'reencoded', fileNameWithOriginalFormat);
-        console.log("[FPS] output file ", strOutputFilePath);
+        let strOutputFilePath = path.join('./public', 'reencoded', fileNameWithOriginalFormat);
+        console.log("[Compress] output file ", strOutputFilePath);
 
         ffmpeg(strFilePathToProcess)
         .output(strOutputFilePath)

@@ -4,9 +4,10 @@ import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Box, Slider, Typography, IconButton, Tooltip  } from '@mui/material';
 
-import { GetFileExt, formDataConfig } from '../../constants';
+import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
+import Footer from '../Footer';
 
 function Compress({wsClient}) {
     const [compressValue, setCompressValue] = useState(20);
@@ -23,8 +24,8 @@ function Compress({wsClient}) {
 
         if(response)
         {
-            let action = 4;
-	        let actionParam = {"COMPRESS_VAL": compressValue};
+            const action = ACTION.COMPRESS;
+	        const actionParam = {"COMPRESS_VAL": compressValue};
 
             wsClient.send(JSON.stringify({
 				type: "enque",
@@ -92,7 +93,8 @@ function Compress({wsClient}) {
                 <Result
                     percent = {completionPercent}
                     strVideoPath = {strVideoPath}
-                ></Result>  
+                    action = {ACTION.COMPRESS}
+                />  
             ) : (
             
             <Box
@@ -148,7 +150,10 @@ function Compress({wsClient}) {
                 </form>
             </Box>
             ) 
+
         }
+           <Footer/>
+
         </>
   )
 }

@@ -6,7 +6,7 @@ import { Button, Box} from '@mui/material';
 import { FormControl, InputLabel, MenuItem, Select,FormHelperText  } from '@mui/material';
 
 
-import { GetFileExt, formDataConfig } from '../../constants';
+import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
 
@@ -30,7 +30,7 @@ function Resolution({wsClient}) {
 
         if(response)
         {
-            let action = 2;
+            const action = ACTION.RESOLUTION;
             let param;
             console.log("send ws", selectedResolution);
             
@@ -140,6 +140,7 @@ function Resolution({wsClient}) {
                 <Result
                     percent = {completionPercent}
                     strVideoPath = {strVideoPath}
+                    action = {ACTION.RESOLUTION}
                 />  
             ) : (
                 <Box

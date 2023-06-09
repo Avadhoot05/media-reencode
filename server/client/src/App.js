@@ -9,6 +9,7 @@ import Format from './components/Views/Format';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Compress from './components/Views/Compress';
+import Footer from './components/Footer';
 
 const client = new W3CWebSocket('ws://127.0.0.1:8000');
 
@@ -22,7 +23,7 @@ function App() {
 	}, []);
     
   return (
-    <div className="App">
+    <div className="App" >
 		{/* <WSHandler/> */}
 		<ToastContainer 
             position="top-center"
@@ -46,8 +47,9 @@ function App() {
 				<Route path="/resolution" element={<Resolution wsClient = {client}/>}></Route>
 				<Route path="/compress" element={<Compress wsClient = {client}/>}></Route>
 			</Routes >
-		</Router>
 		
+
+		</Router>
       
 	  
     </div>

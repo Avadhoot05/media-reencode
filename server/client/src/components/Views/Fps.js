@@ -4,7 +4,7 @@ import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, TextField, Box} from '@mui/material';
 
-import { GetFileExt, formDataConfig } from '../../constants';
+import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
 
@@ -51,8 +51,8 @@ function Fps({wsClient}) {
 
         if(response)
         {
-            let action = 1;
-	        let actionParam = {"FPS": fps};
+            const action = ACTION.FPS;
+	        const actionParam = {"FPS": fps};
 
             wsClient.send(JSON.stringify({
 				type: "enque",
@@ -107,7 +107,8 @@ function Fps({wsClient}) {
                 <Result
                     percent = {completionPercent}
                     strVideoPath = {strVideoPath}
-                ></Result>  
+                    action = {ACTION.FPS}
+                />
             ) : (
             
             <Box

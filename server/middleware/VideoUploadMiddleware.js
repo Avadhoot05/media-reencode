@@ -6,19 +6,19 @@ const fs = require("fs");
 var storage = multer.diskStorage({
     destination: function (req, file, cb) 
     {
-        if (!fs.existsSync("tmp")) {
-            fs.mkdirSync("tmp");
+        if (!fs.existsSync("public")) {
+            fs.mkdirSync("public");
           }
       
-        if (!fs.existsSync("tmp/uploaded")) {
-            fs.mkdirSync("tmp/uploaded");
+        if (!fs.existsSync("public/uploaded")) {
+            fs.mkdirSync("public/uploaded");
         }
 
       
-        if (!fs.existsSync("tmp/reencoded")) {
-            fs.mkdirSync("tmp/reencoded");
+        if (!fs.existsSync("public/reencoded")) {
+            fs.mkdirSync("public/reencoded");
         }
-    	cb(null, './tmp/uploaded')
+    	cb(null, './public/uploaded')
     },
 
     filename: function (req, file, cb) 

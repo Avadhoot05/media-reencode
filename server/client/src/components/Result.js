@@ -1,22 +1,51 @@
 import React from 'react';
-import { BACKEND_URI } from '../constants';
-import { LinearProgress, Typography } from '@mui/material';
+import { ACTION, BACKEND_URI } from '../constants';
+import { LinearProgress, Typography, Button, Box } from '@mui/material';
+import { saveAs } from 'file-saver';
+import { MdOutlineFileDownload } from "react-icons/md";
 
-function Result({percent, strVideoPath}) {
+
+function Result({percent, strVideoPath, action}) {
+    const HandleDownload = e => {
+	    saveAs(BACKEND_URI + strVideoPath, "video");
+    }
+
+    let message = "";
+    if(action === ACTION.FPS)
+        message =  "The video's FPS has been updated.";
+    else if(action === ACTION.COMPRESS)
+        message =  "The video has been compressed.";
+    else if(action === ACTION.RESOLUTION)
+        message =  "The video's resolution has been updated.";
+    else if(action === ACTION.FORMAT)
+        message =  "The video's format has been updated.";
+
 
     return (  
     <>
-    {
-        strVideoPath.length > 0 ? (
-            <video
-                preload="auto"
-                width="320"
-                height="240"
-                controls
+        {
+            strVideoPath.length > 0 ? (
+                
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    height="100vh"
                 >
-                <source src={`${BACKEND_URI}${strVideoPath}`} />
-                ;Your browser does not support the video tag.
-            </video>
+                    <Typography variant="body1" component="p" fontSize={18} marginBottom={3}>
+                        {message}
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        endIcon={<MdOutlineFileDownload />}
+                        onClick={HandleDownload}
+                    >
+                        Download
+                    </Button>
+                </Box>
         ) : (
      
             <div style={{ display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
