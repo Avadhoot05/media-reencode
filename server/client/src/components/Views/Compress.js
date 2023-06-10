@@ -7,7 +7,8 @@ import { Button, Box, Slider, Typography, IconButton, Tooltip  } from '@mui/mate
 import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
-import Footer from '../Footer';
+
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 function Compress({wsClient}) {
     const [compressValue, setCompressValue] = useState(20);
@@ -118,14 +119,12 @@ function Compress({wsClient}) {
                         <Box display="flex" flexDirection="column" alignItems="flex-start" style={{width: "100%", margin: "15px 0"}}>
 
                             <div style={{display: "flex"}}>
-                                <Typography id="slider-label" variant="body1">
+                                <Typography id="slider-label" variant="body1" fontWeight={500}>
                                     Compression strength: {compressValue}%
                                 </Typography> 
-                                <Tooltip title="Higher value indicates stronger compression, but potentially lower quality. 
-                                                The recommended compression strength is 20.">
-                                    <IconButton>
-                                        {/* <InfoIcon /> */}
-                                    </IconButton>
+
+                                <Tooltip title="Higher value indicates stronger compression, but potentially lower quality. The recommended compression strength is 20."  arrow>
+                                    <Box><AiOutlineInfoCircle style={{cursor: 'pointer', marginLeft: '5px'}}/></Box>
                                 </Tooltip>
                             </div>
                             <Slider

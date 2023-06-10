@@ -19,7 +19,7 @@ dotenv.config({ path: "./config.env" });
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use('/', router);
 
-const port =  process.env.PORT;
+const port =  process.env.PORT || 3000;
 
 if (process.env.NODE_ENV == "production") {
   app.use(express.static(path.join(__dirname, "client" , "build")));

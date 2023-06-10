@@ -1,11 +1,12 @@
-import React, {useState} from 'react'
-import { Grid, Card, CardActionArea, CardContent, Typography,Button  } from '@mui/material';
+import React from 'react'
+import { Grid, Card, CardActionArea, CardContent, Typography,Tooltip  } from '@mui/material';
 
 
 function ActionCard({strTitle, strContent, onClick}) {
 
   return (
     <>
+			<Tooltip title={strContent} arrow>
         <Grid item xs={8} sm={3}>
             <Card onClick={onClick}>
 			          <CardActionArea>
@@ -18,6 +19,7 @@ function ActionCard({strTitle, strContent, onClick}) {
 			    </CardActionArea>
             </Card>
         </Grid>
+      </Tooltip>
     </>
   )
 }

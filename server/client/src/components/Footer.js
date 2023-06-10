@@ -31,7 +31,7 @@ const Footer = () => {
         <Grid container spacing={0} justify="space-between" width="40%" minWidth="300px">
           
         <Grid item xs={2}  style={sectionStyle}>
-            <Tooltip title="Website">
+            <Tooltip title="Website" arrow>
             <Link to="https://avadhootkhedekar.com" target='_blank'>
                 <CgWebsite color='#666666' size={25}/>
             </Link>    
@@ -39,7 +39,7 @@ const Footer = () => {
         </Grid>
 
         <Grid item xs={2}  style={sectionStyle}>
-            <Tooltip title="Linkedin">
+            <Tooltip title="Linkedin" arrow>
                 <Link to="https://www.linkedin.com/in/avadhootkhedekar/" target='_blank'>
                     <AiFillLinkedin color='#666666' size={25}/>
 		        </Link>
@@ -47,7 +47,7 @@ const Footer = () => {
         </Grid>
         
         <Grid item xs={2}  style={sectionStyle}>
-            <Tooltip title="Email">
+            <Tooltip title="Email" arrow>
                 <Link to="mailto: khedekaravadhoot@gmail.com" target='_blank'>
                     <MdEmail color='#666666' size={25}/>
                 </Link>
@@ -55,7 +55,7 @@ const Footer = () => {
         </Grid>
         
         <Grid item xs={2}  style={sectionStyle}>
-            <Tooltip title="GitHub">
+            <Tooltip title="GitHub" arrow>
                 <Link to="https://github.com/Avadhoot05" target='_blank'>
                     <VscGithubInverted color='#666666' size={25}/>
 			    </Link>
@@ -63,7 +63,7 @@ const Footer = () => {
         </Grid>
 
         <Grid item xs={2}  style={sectionStyle}>
-            <Tooltip title="LeetCode">
+            <Tooltip title="LeetCode" arrow>
                 <Link to="https://leetcode.com/avadhoot05/" target='_blank'>
                     <SiLeetcode color='#666666' size={25}/>
 			    </Link>
@@ -71,7 +71,7 @@ const Footer = () => {
         </Grid>
 
         <Grid item xs={2}  style={sectionStyle}>
-            <Tooltip title="GeeksForGeeks">
+            <Tooltip title="GeeksForGeeks" arrow>
                 <Link to="https://auth.geeksforgeeks.org/user/khedekaravadhoot/" target='_blank'>
                     <SiGeeksforgeeks color='#666666' size={25}/>
 			    </Link>

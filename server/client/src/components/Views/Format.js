@@ -130,7 +130,7 @@ function Format({wsClient}) {
                     height="100vh"
                 >
                     <PageHeading
-                        heading="Video Format Reencoding"
+                        heading="Video Format Conversion"
                         description= "Reencode video files by modifying the file format."
                     />
                     <form onSubmit={HandleFormSubmit}>
@@ -168,7 +168,6 @@ function Format({wsClient}) {
                             >
                                 upload
                             </Button>
-                            <BackButton/>
                         </Box>
                     </form>
                     
