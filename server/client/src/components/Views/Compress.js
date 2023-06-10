@@ -148,11 +148,11 @@ function Compress({wsClient}) {
 
                     </Box>
                 </form>
+                
             </Box>
             ) 
 
         }
-           <Footer/>
 
         </>
   )

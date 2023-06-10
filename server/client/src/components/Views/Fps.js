@@ -8,6 +8,7 @@ import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
 
+
 function Fps({wsClient}) {
 
     const [fps, setFps] = useState('');
@@ -134,14 +135,12 @@ function Fps({wsClient}) {
                             label="FPS"
                             variant="outlined"
                             required
-                            style={{ width: '100%', margin: "15px 0" }}
+                            style={{ width: '100%', margin: "15px 0"}}
                             value={fps}
                             onChange={HandleFpsChange}
                             error={!!strErrorText}
                             helperText={strErrorText}
-                            inputProps={{
-                                min: 1,
-                            }}
+                            inputProps={{min: 1}}
                         />
 
                         <Button 
@@ -157,23 +156,6 @@ function Fps({wsClient}) {
             </Box>
             ) 
         }
-
-            
-
-                             
-            {/* {
-                (videoPath.length > 0) && (
-                    <video
-                        preload="auto"
-                        width="320"
-                        height="240"
-                        controls
-                        >
-                        <source src={`${BACKEND_URI}${videoPath}`} />
-                        ;Your browser does not support the video tag.
-                    </video>
-                )
-            } */}
         </>
   )
 }

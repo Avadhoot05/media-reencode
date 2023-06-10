@@ -48,7 +48,7 @@ function App() {
 				<Route path="/compress" element={<Compress wsClient = {client}/>}></Route>
 			</Routes >
 		
-
+		<Footer/>
 		</Router>
       
 	  
