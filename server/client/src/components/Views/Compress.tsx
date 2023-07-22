@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import FileUpload from '../FileUpload';
 import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
-import { Button, Box, Slider, Typography, IconButton, Tooltip  } from '@mui/material';
+import { Button, Box, Slider, Typography, Tooltip  } from '@mui/material';
 
 import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
@@ -10,14 +10,18 @@ import PageHeading from '../PageHeading';
 
 import { AiOutlineInfoCircle } from "react-icons/ai";
 
+interface IWsMessage {
+    data : string
+}
+
 function Compress({wsClient}) {
-    const [compressValue, setCompressValue] = useState(20);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [completionPercent, setCompletionPercent] = useState(0);
+    const [compressValue, setCompressValue] = useState<number>(20);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [completionPercent, setCompletionPercent] = useState<number>(0);
 
     //include uploading + reencoding
-    const [bProcessing, setProcessing] = useState(false);
-    const [strVideoPath, setVideoPath] = useState("");
+    const [bProcessing, setProcessing] = useState<boolean>(false);
+    const [strVideoPath, setVideoPath] = useState<string>("");
 
     const [response, error, loading, makeRequest] = usePost({url:"/upload", config: formDataConfig} );
 
@@ -25,8 +29,8 @@ function Compress({wsClient}) {
 
         if(response)
         {
-            const action = ACTION.COMPRESS;
-	        const actionParam = {"COMPRESS_VAL": compressValue};
+            const action : number = ACTION.COMPRESS;
+	        const actionParam: {"COMPRESS_VAL": number} = {"COMPRESS_VAL": compressValue};
 
             wsClient.send(JSON.stringify({
 				type: "enque",
@@ -43,11 +47,11 @@ function Compress({wsClient}) {
     },  
     [response, error, loading]);
 
-    wsClient.onmessage = message  => {
+    wsClient.onmessage = (message : IWsMessage) : void  => {
         const dataFromServer = JSON.parse(message.data);
         console.log('WS message! ', dataFromServer);
 
-        if (dataFromServer.type === "reencodeResponse") 
+        if (dataFromServer["type"] === "reencodeResponse") 
         {
             setProcessing(false);
             if(dataFromServer["bSuccess"])
@@ -61,17 +65,18 @@ function Compress({wsClient}) {
             }
         }
 
-        else if(dataFromServer.type === "reencodeProgress")
+        else if(dataFromServer["type"] === "reencodeProgress")
         {
-            setCompletionPercent(dataFromServer["percent"]);
+            const percent : number = isNaN(dataFromServer["percent"]) ? 0 : parseInt(dataFromServer["percent"]);
+            setCompletionPercent(percent);
         }
     };
 
-    const HandleSliderChange = (event, newValue) => {
+    const HandleSliderChange = (event, newValue: number) : void => {
         setCompressValue(newValue);
     };
 
-    const HandleFileChange = e => {
+    const HandleFileChange = (e : ChangeEvent<HTMLInputElement>): void  => {
         setSelectedFile(e.target.files[0]);
     }
 
@@ -81,7 +86,7 @@ function Compress({wsClient}) {
         setCompletionPercent(0);
         setProcessing(true);
        
-        let formData = new FormData();
+        let formData: FormData = new FormData();
         formData.append('video', selectedFile);
         formData.append("format", GetFileExt(selectedFile.name, true));
         makeRequest(formData);

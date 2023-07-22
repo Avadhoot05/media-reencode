@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import { Container, Grid, Typography, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { AiFillLinkedin } from "react-icons/ai";
@@ -22,13 +22,16 @@ const sectionStyle = {
 	
 
 const Footer = () => {
+    console.log("footer rendering");
   return (
     <footer style={footerStyle}>
         <Container maxWidth="lg" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}} >
             <Typography variant="body1" component="p" fontSize={18} marginBottom={3}>
                 Connect with the developer
             </Typography>
-        <Grid container spacing={0} justify="space-between" width="40%" minWidth="300px">
+        {/* <Grid container spacing={0} justify="space-between" width="40%" minWidth="300px"> */}
+        <Grid container spacing={0} width="40%" minWidth="300px">
+
           
         <Grid item xs={2}  style={sectionStyle}>
             <Tooltip title="Website" arrow>

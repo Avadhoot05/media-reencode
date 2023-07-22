@@ -1,36 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, ChangeEvent } from 'react'
 import FileUpload from '../FileUpload'
 import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Box} from '@mui/material';
 import { FormControl, InputLabel, MenuItem, Select,FormHelperText  } from '@mui/material';
 
-
 import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
 
+interface IWsMessage {
+    data : string
+}
+
 function Resolution({wsClient}) {
     console.log("Resolution")
-    const arrResolution = [{1: '320x240 (240p)'}, {2: '640x360 (360p)'}, {3: '640x480 (480p)'}, {4: '1280x720 (720p)'}, {5: '1920x1080 (1080p)'}];
+    const arrResolution : Array<object> = [{1: '320x240 (240p)'}, {2: '640x360 (360p)'}, {3: '640x480 (480p)'}, {4: '1280x720 (720p)'}, {5: '1920x1080 (1080p)'}];
 
 
-    const [selectedResolution, setSelectedResolution] = useState("");
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [strErrorText, setErrorText] = useState('');
+    const [selectedResolution, setSelectedResolution] = useState<number>(0);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [strErrorText, setErrorText] = useState<string>('');
     
-    const [completionPercent, setCompletionPercent] = useState(0);
+    const [completionPercent, setCompletionPercent] = useState<number>(0);
     const [response, error, loading, makeRequest] = usePost({url:"/upload", config: formDataConfig} );
 
     //include uploading + reencoding
-    const [bProcessing, setProcessing] = useState(false);
-    const [strVideoPath, setVideoPath] = useState("");
+    const [bProcessing, setProcessing] = useState<boolean>(false);
+    const [strVideoPath, setVideoPath] = useState<string>("");
 
     useEffect(() => {
 
         if(response)
         {
-            const action = ACTION.RESOLUTION;
+            const action : number = ACTION.RESOLUTION;
             let param;
             console.log("send ws", selectedResolution);
             
@@ -78,11 +81,11 @@ function Resolution({wsClient}) {
     },  
     [response, error, loading]);
 
-    wsClient.onmessage = message  => {
+    wsClient.onmessage = (message : IWsMessage) : void  => {
         const dataFromServer = JSON.parse(message.data);
         console.log('WS message! ', dataFromServer);
 
-        if (dataFromServer.type === "reencodeResponse") 
+        if (dataFromServer["type"] === "reencodeResponse") 
         {
             setProcessing(false);
             if(dataFromServer["bSuccess"])
@@ -96,18 +99,19 @@ function Resolution({wsClient}) {
             }
         }
 
-        else if(dataFromServer.type === "reencodeProgress")
+        else if(dataFromServer["type"] === "reencodeProgress")
         {
-            setCompletionPercent(dataFromServer["percent"]);
+            const percent : number = isNaN(dataFromServer["percent"]) ? 0 : parseInt(dataFromServer["percent"]);
+            setCompletionPercent(percent);
         }
     };
 
-    const handleResolutionChange = e => {
+    const handleResolutionChange = (e : ChangeEvent<HTMLInputElement>) : void => {
         setErrorText("");
-        setSelectedResolution(e.target.value)
+        setSelectedResolution(parseInt(e.target.value));
     };
 
-    const HandleFileChange = e => {
+    const HandleFileChange = (e : ChangeEvent<HTMLInputElement>) : void  => {
         setErrorText("");
         setSelectedFile(e.target.files[0]);
     }
@@ -119,16 +123,16 @@ function Resolution({wsClient}) {
         setCompletionPercent(0);
         setProcessing(true);
 
-        let formData = new FormData();
+        let formData : FormData = new FormData();
         formData.append("video", selectedFile);
         formData.append("format", GetFileExt(selectedFile.name, true));
         makeRequest(formData);
     }
 
-    const GetMenuItems = () => {
+    const GetMenuItems = () : Array<any> => {
         return arrResolution.map(res => {
-            let k = Object.keys(res)[0];
-            let val = res[k];
+            const k : string = Object.keys(res)[0];
+            const val : string = res[k];
             return <MenuItem key={k} value={k}>{val}</MenuItem>
         });
     }
@@ -185,7 +189,7 @@ function Resolution({wsClient}) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary"
-                                disabled={strErrorText !== "" || selectedFile === null || selectedResolution === ""}
+                                disabled={strErrorText !== "" || selectedFile === null || selectedResolution === 0}
                             >
                                 upload
                             </Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, ChangeEvent } from 'react'
 import FileUpload from '../FileUpload'
 import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,27 +8,28 @@ import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
 
+interface IWsMessage {
+    data : string
+}
 
 function Fps({wsClient}) {
 
-    const [fps, setFps] = useState('');
-    const [strErrorText, setErrorText] = useState('');
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [completionPercent, setCompletionPercent] = useState(0);
+    const [fps, setFps] = useState<string>('');
+    const [strErrorText, setErrorText] = useState<string>('');
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [completionPercent, setCompletionPercent] = useState<number>(0);
     
     const [response, error, loading, makeRequest] = usePost({url:"/upload", config: formDataConfig} );
 
     //include uploading + reencoding
-    const [bProcessing, setProcessing] = useState(false);
+    const [bProcessing, setProcessing] = useState<boolean>(false);
+    const [strVideoPath, setVideoPath] = useState<string>("");
 
-    
-    const [strVideoPath, setVideoPath] = useState("");
-
-    wsClient.onmessage = message  => {
+    wsClient.onmessage = (message : IWsMessage) : void => {
         const dataFromServer = JSON.parse(message.data);
         console.log('WS message! ', dataFromServer);
 
-        if (dataFromServer.type === "reencodeResponse") 
+        if (dataFromServer["type"] === "reencodeResponse") 
         {
             setProcessing(false);
             if(dataFromServer["bSuccess"])
@@ -42,9 +43,10 @@ function Fps({wsClient}) {
             }
         }
 
-        else if(dataFromServer.type === "reencodeProgress")
+        else if(dataFromServer["type"] === "reencodeProgress")
         {
-            setCompletionPercent(dataFromServer["percent"]);
+            const percent : number = isNaN(dataFromServer["percent"]) ? 0 : parseInt(dataFromServer["percent"]);
+            setCompletionPercent(percent);
         }
     };
 
@@ -52,8 +54,8 @@ function Fps({wsClient}) {
 
         if(response)
         {
-            const action = ACTION.FPS;
-	        const actionParam = {"FPS": fps};
+            const action : number = ACTION.FPS;
+	        const actionParam : {"FPS" : string} = {"FPS": fps};
 
             wsClient.send(JSON.stringify({
 				type: "enque",
@@ -71,9 +73,9 @@ function Fps({wsClient}) {
     [response, error, loading]);
 
 
-    const HandleFpsChange = (event) => {
+    const HandleFpsChange = (e : ChangeEvent<HTMLInputElement>) : void => {
         setErrorText('');
-        let fps = event.target.value;
+        const fps = e.target.value;
 
         if (!/^[1-9]\d*$/.test(fps)) {
             setFps(fps);
@@ -81,11 +83,11 @@ function Fps({wsClient}) {
             return;
         }
 
-        setFps(Math.min(240, fps));
+        setFps(Math.min(240, parseInt(fps)).toString());
 
     };
 
-    const HandleFileChange = e => {
+    const HandleFileChange = (e : ChangeEvent<HTMLInputElement>) : void => {
         setSelectedFile(e.target.files[0]);
     }
 
@@ -95,7 +97,7 @@ function Fps({wsClient}) {
         setCompletionPercent(0);
         setProcessing(true);
        
-        let formData = new FormData();
+        let formData : FormData = new FormData();
         formData.append('video', selectedFile);
         formData.append("format", GetFileExt(selectedFile.name, true));
         makeRequest(formData);

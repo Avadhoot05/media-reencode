@@ -64,6 +64,9 @@ wsServer.on('request', function(req) {
 			if(data.type == 'enque')
 			{
 				//TODO: make a redis bull queue similar to this.
+				console.log("data");
+				console.log(data);
+
 				let job = new Job(data.newUploadedFileName, data.uploadedFileFormat, connection, data.action, data.actionParam);
 				processor.AddToQueue(job);
 				processor.ProcessJobs();

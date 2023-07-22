@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, ChangeEvent } from 'react'
 import FileUpload from '../FileUpload'
 import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,30 +9,33 @@ import { FormControl, InputLabel, MenuItem, Select,FormHelperText  } from '@mui/
 import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
-import BackButton from '../BackButton';
+
+interface IWsMessage {
+    data : string
+}
 
 //3gp-0, mp4-1, mov-1, flv-1, mkv-1, avi, webm-0, 
 function Format({wsClient}) {
     console.log("format")
-    const arrFormat = [/*{1: '3gp'}*/ , {2: 'mp4'}, {3: 'mov'}, {4: 'flv'},{5: 'mkv'},{6: 'avi'}, /*{7: 'webm'}*/];
+    const arrFormat : Array<object> = [/*{1: '3gp'}*/ , {2: 'mp4'}, {3: 'mov'}, {4: 'flv'},{5: 'mkv'},{6: 'avi'}, /*{7: 'webm'}*/];
 
-    const [selectedFormat, setSelectedFormat] = useState('');
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [strErrorText, setErrorText] = useState('');
+    const [selectedFormat, setSelectedFormat] = useState<string>('');
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [strErrorText, setErrorText] = useState<string>('');
     
-    const [completionPercent, setCompletionPercent] = useState(0);
+    const [completionPercent, setCompletionPercent] = useState<number>(0);
     const [response, error, loading, makeRequest] = usePost({url:"/upload", config: formDataConfig} );
 
     //include uploading + reencoding
-    const [bProcessing, setProcessing] = useState(false);
-    const [strVideoPath, setVideoPath] = useState("");
+    const [bProcessing, setProcessing] = useState<boolean>(false);
+    const [strVideoPath, setVideoPath] = useState<string>("");
 
     useEffect(() => {
 
         if(response)
         {
-            const action = ACTION.FORMAT;
-	        const actionParam = {"FORMAT": selectedFormat};
+            const action : number = ACTION.FORMAT;
+	        const actionParam : {"FORMAT" : string}= {"FORMAT": selectedFormat};
 
             wsClient.send(JSON.stringify({
 				type: "enque",
@@ -49,11 +52,11 @@ function Format({wsClient}) {
     },  
     [response, error, loading]);
 
-    wsClient.onmessage = message  => {
+    wsClient.onmessage = (message : IWsMessage) : void  => {
         const dataFromServer = JSON.parse(message.data);
         console.log('WS message! ', dataFromServer);
 
-        if (dataFromServer.type === "reencodeResponse") 
+        if (dataFromServer["type"] === "reencodeResponse") 
         {
             setProcessing(false);
             if(dataFromServer["bSuccess"])
@@ -67,21 +70,28 @@ function Format({wsClient}) {
             }
         }
 
-        else if(dataFromServer.type === "reencodeProgress")
+        else if(dataFromServer["type"] === "reencodeProgress")
         {
-            setCompletionPercent(dataFromServer["percent"]);
+            const percent : number = isNaN(dataFromServer["percent"]) ? 0 : parseInt(dataFromServer["percent"]);
+            setCompletionPercent(percent);
         }
     };
 
-    const handleFormatChange = (event) => {
+    /**
+     * when user changes the video format 
+     */
+    const handleFormatChange = (e : ChangeEvent<HTMLInputElement>) : void => {
         setErrorText("");
-        setSelectedFormat(event.target.value);
+        setSelectedFormat(e.target.value);
 
-        if(selectedFile && event.target.value.toLowerCase() == GetFileExt(selectedFile.name, false).toLowerCase())
+        if(selectedFile && e.target.value.toLowerCase() == GetFileExt(selectedFile.name, false).toLowerCase())
             setErrorText("file is already in selected file format");
     };
 
-    const HandleFileChange = e => {
+    /**
+     * when File change
+     */
+    const HandleFileChange = (e : ChangeEvent<HTMLInputElement>) : void => {
         
         setErrorText("");
         setSelectedFile(e.target.files[0]);
@@ -98,16 +108,20 @@ function Format({wsClient}) {
         setCompletionPercent(0);
         setProcessing(true);
        
-        let formData = new FormData();
+        let formData : FormData = new FormData();
         formData.append("video", selectedFile);
         formData.append("format", GetFileExt(selectedFile.name, true));
         makeRequest(formData);
     }
 
-    const GetMenuItems = () => {
+    /**
+     * get dropdown list items
+     */
+    const GetMenuItems = () : Array<any> => {
+
         return arrFormat.map(format => {
-            let k = Object.keys(format)[0];
-            let val = format[k];
+            const k : string = Object.keys(format)[0];
+            const val : string  = format[k];
             return <MenuItem key={k} value={val}>{val.toUpperCase()}</MenuItem>
         });
     }

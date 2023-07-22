@@ -4,13 +4,22 @@ import { LinearProgress, Typography, Button, Box } from '@mui/material';
 import { saveAs } from 'file-saver';
 import { MdOutlineFileDownload } from "react-icons/md";
 
+interface Props {
+    percent: number, 
+    strVideoPath: string, 
+    action: number
+}
 
-function Result({percent, strVideoPath, action}) {
-    const HandleDownload = e => {
+function Result(props : Props) 
+{
+    let {percent, strVideoPath, action} = props;
+    const HandleDownload = ( e: any ) : void => {
 	    saveAs(BACKEND_URI + strVideoPath, "video");
     }
 
-    let message = "";
+    percent = isNaN(percent) ? 0 : percent;
+
+    let message : string = "";
     if(action === ACTION.FPS)
         message =  "The video's FPS has been updated.";
     else if(action === ACTION.COMPRESS)

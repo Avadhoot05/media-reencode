@@ -1,21 +1,26 @@
-import React from 'react'
+import React, {ChangeEvent} from 'react'
 import { BytesToMB } from '../utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { TextField } from '@mui/material';
 
 
-function FileUpload({onChangeHandler}) {
+interface Props {
+    onChangeHandler: (e: ChangeEvent) => void
+}
 
-   
-    const HandleFileChange = e => {
+function FileUpload(props : Props) {
+
+    const {onChangeHandler} = props;
+
+    const HandleFileChange = (e :  ChangeEvent<HTMLInputElement>)  => {
         const file = e.target.files[0];
         console.log("size", BytesToMB(file.size));
         
         if(BytesToMB(file.size) > 200)
         {
             toast.warn("file exceeded 200MB");
-            e.target.value = null;
+            e.target.value = "";
             return;
         }
             
