@@ -30,6 +30,7 @@ function FileUpload(props : Props) {
     return (
         <>
             <TextField
+                data-testid="file-input"
                 type="file"
                 onChange={HandleFileChange}
                 style={{ width: '100%' }}

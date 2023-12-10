@@ -26,7 +26,7 @@ const Footer = () => {
   return (
     <footer style={footerStyle}>
         <Container maxWidth="lg" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}} >
-            <Typography variant="body1" component="p" fontSize={18} marginBottom={3}>
+            <Typography data-testid="footer-head" variant="body1" component="p" fontSize={18} marginBottom={3}>
                 Connect with the developer
             </Typography>
         {/* <Grid container spacing={0} justify="space-between" width="40%" minWidth="300px"> */}
