@@ -8,7 +8,7 @@ function ActionCard({strTitle, strContent, onClick}) {
     <>
 			<Tooltip title={strContent} arrow>
         <Grid item xs={8} sm={3}>
-            <Card onClick={onClick}>
+            <Card role="gridcell" onClick={onClick}>
 			          <CardActionArea>
                     <CardContent>
                         <Typography variant="h5" marginBottom={1} fontWeight={600}>{strTitle}</Typography>
