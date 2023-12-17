@@ -9,7 +9,11 @@ export const ACTION_CARD = {
 	COMPRESS: 4
 }
 
-const ActionCardContainer = ({OnGridItemClicked}) => {
+interface propType {
+    OnGridItemClicked: Function
+}
+
+const ActionCardContainer = ({OnGridItemClicked} : propType) => {
     return (
         <Grid container spacing={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',maxWidth: '900px', margin: '0 auto' }}>
           

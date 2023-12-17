@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent } from 'react';
+import React, { useEffect, useState, ChangeEvent, ReactElement } from 'react';
 import FileUpload from '../FileUpload';
 import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +14,7 @@ interface IWsMessage {
     data : string
 }
 
-function Compress({wsClient}) {
+function Compress({wsClient}) : ReactElement {
     const [compressValue, setCompressValue] = useState<number>(20);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [completionPercent, setCompletionPercent] = useState<number>(0);
@@ -77,6 +77,7 @@ function Compress({wsClient}) {
     };
 
     const HandleFileChange = (e : ChangeEvent<HTMLInputElement>): void  => {
+        console.log(e.target.files[0]); 
         setSelectedFile(e.target.files[0]);
     }
 
