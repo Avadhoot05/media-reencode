@@ -133,6 +133,7 @@ function Fps({wsClient}) {
                             onChangeHandler={HandleFileChange}
                         />
                         <TextField
+                            data-testid="fps-input"
                             type="number"
                             label="FPS"
                             variant="outlined"
@@ -146,6 +147,7 @@ function Fps({wsClient}) {
                         />
 
                         <Button 
+                            data-testid="uploadbtn"
                             type="submit" 
                             variant="contained" 
                             color="primary"

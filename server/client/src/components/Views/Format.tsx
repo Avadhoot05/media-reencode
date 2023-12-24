@@ -16,7 +16,6 @@ interface IWsMessage {
 
 //3gp-0, mp4-1, mov-1, flv-1, mkv-1, avi, webm-0, 
 function Format({wsClient}) {
-    console.log("format")
     const arrFormat : Array<object> = [/*{1: '3gp'}*/ , {2: 'mp4'}, {3: 'mov'}, {4: 'flv'},{5: 'mkv'},{6: 'avi'}, /*{7: 'webm'}*/];
 
     const [selectedFormat, setSelectedFormat] = useState<string>('');
@@ -163,6 +162,7 @@ function Format({wsClient}) {
                             >
                                 <InputLabel id="format-label">Select Format</InputLabel>
                                 <Select
+                                    data-testid="format-select"
                                     labelId="format-label"
                                     value={selectedFormat}
                                     onChange={handleFormatChange}
@@ -175,6 +175,7 @@ function Format({wsClient}) {
                             </FormControl>
         
                             <Button 
+                                data-testid="uploadbtn"
                                 type="submit" 
                                 variant="contained" 
                                 color="primary"

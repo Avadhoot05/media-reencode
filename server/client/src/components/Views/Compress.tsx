@@ -126,7 +126,7 @@ function Compress({wsClient}) : ReactElement {
 
                             <div style={{display: "flex"}}>
                                 <Typography id="slider-label" variant="body1" fontWeight={500}>
-                                    Compression strength: {compressValue}%
+                                    Compression strength: <span data-testid="value-label">{compressValue}</span>%
                                 </Typography> 
 
                                 <Tooltip title="Higher value indicates stronger compression, but potentially lower quality. The recommended compression strength is 20."  arrow>
@@ -134,6 +134,7 @@ function Compress({wsClient}) : ReactElement {
                                 </Tooltip>
                             </div>
                             <Slider
+                                data-testid="slider"
                                 value={compressValue}
                                 min={0}
                                 max={100}
@@ -143,6 +144,7 @@ function Compress({wsClient}) : ReactElement {
                                 />
                         </Box>
                         <Button 
+                            data-testid="uploadbtn"
                             type="submit" 
                             variant="contained" 
                             color="primary"
