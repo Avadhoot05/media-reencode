@@ -36,7 +36,7 @@ app.listen(port, () => {
 
 
 //ws
-const WS_SERVER_PORT = process.env.WS_SERVER_PORT; 
+const WS_SERVER_PORT = process.env.WS_SERVER_PORT | 8000; 
 const server = http.createServer();
 server.listen(WS_SERVER_PORT);
 console.log(`WS Server is running at ${WS_SERVER_PORT}`);
