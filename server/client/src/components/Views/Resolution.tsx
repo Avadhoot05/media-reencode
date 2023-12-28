@@ -8,6 +8,7 @@ import { FormControl, InputLabel, MenuItem, Select,FormHelperText  } from '@mui/
 import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
+import { baseUrl } from 'src/utils';
 
 interface IWsMessage {
     data : string
@@ -23,7 +24,7 @@ function Resolution({wsClient}) {
     const [strErrorText, setErrorText] = useState<string>('');
     
     const [completionPercent, setCompletionPercent] = useState<number>(0);
-    const [response, error, loading, makeRequest] = usePost({url:"/upload", config: formDataConfig} );
+    const [response, error, loading, makeRequest] = usePost({url:`${baseUrl}/upload`, config: formDataConfig} );
 
     //include uploading + reencoding
     const [bProcessing, setProcessing] = useState<boolean>(false);

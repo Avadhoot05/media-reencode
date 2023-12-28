@@ -7,6 +7,7 @@ import { Button, TextField, Box} from '@mui/material';
 import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
+import { baseUrl } from 'src/utils';
 
 interface IWsMessage {
     data : string
@@ -19,7 +20,7 @@ function Fps({wsClient}) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [completionPercent, setCompletionPercent] = useState<number>(0);
     
-    const [response, error, loading, makeRequest] = usePost({url:"/upload", config: formDataConfig} );
+    const [response, error, loading, makeRequest] = usePost({url:`${baseUrl}/upload`, config: formDataConfig} );
 
     //include uploading + reencoding
     const [bProcessing, setProcessing] = useState<boolean>(false);

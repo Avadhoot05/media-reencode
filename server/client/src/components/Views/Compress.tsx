@@ -9,6 +9,7 @@ import Result from '../Result';
 import PageHeading from '../PageHeading';
 
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { baseUrl } from 'src/utils';
 
 interface IWsMessage {
     data : string
@@ -23,7 +24,7 @@ function Compress({wsClient}) : ReactElement {
     const [bProcessing, setProcessing] = useState<boolean>(false);
     const [strVideoPath, setVideoPath] = useState<string>("");
 
-    const [response, error, loading, makeRequest] = usePost({url:"/upload", config: formDataConfig} );
+    const [response, error, loading, makeRequest] = usePost({url:`${baseUrl}/upload`, config: formDataConfig} );
 
     useEffect(() => {
 
