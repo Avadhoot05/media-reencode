@@ -7,13 +7,14 @@ import { ToastContainer, Slide } from 'react-toastify';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Footer from './components/Footer';
+import { wsUrl } from './utils';
 
 const Compress = lazy(() => import('./components/Views/Compress'));
 const Resolution = lazy(() => import('./components/Views/Resolution'));
 const Format = lazy(()=> import('./components/Views/Format'));
 const Fps = lazy(() => import('./components/Views/Fps')); 
 
-const client = new W3CWebSocket('ws://127.0.0.1:8000');
+const client = new W3CWebSocket(wsUrl);
 
 function App() {
 	//ws

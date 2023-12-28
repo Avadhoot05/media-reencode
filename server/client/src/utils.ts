@@ -8,6 +8,15 @@ export const IsValidFile = (file : File) : boolean => {
     return false;
 }
 
-const prod = "http://ec2-54-90-108-68.compute-1.amazonaws.com/3000";
-const dev = "http://localhost:3000";
-export const baseUrl = (window.location.hostname.split(":")[0] === "localhost" || window.location.hostname.includes("192")) ? dev : prod; 
+const PORT = 3000
+const WS_SERVER_PORT = 8000
+
+const prod = "http://ec2-54-90-108-68.compute-1.amazonaws.com:";
+const dev = "http://localhost:";
+
+export const baseUrl = (window.location.hostname.split(":")[0] === "localhost" || window.location.hostname.includes("192")) ? dev + PORT : prod + PORT; 
+
+const wsProd = "ws://ec2-54-90-108-68.compute-1.amazonaws.com:";
+const wsDev = "ws://localhost:";
+
+export const wsUrl = (window.location.hostname.split(":")[0] === "localhost" || window.location.hostname.includes("192")) ? wsDev + WS_SERVER_PORT : wsProd + WS_SERVER_PORT; 
