@@ -21,7 +21,7 @@ app.use('/', router);
 
 const port =  process.env.PORT || 3000;
 
-if (process.env.NODE_ENV == "production") {
+// if (process.env.NODE_ENV == "production") {
 	console.log("prod env detected");
 	const pathBuild = path.join(__dirname, "client" , "build");
 	console.log("path build ", pathBuild);
@@ -32,7 +32,7 @@ if (process.env.NODE_ENV == "production") {
 	console.log("index path ", pathIndex);
     res.sendFile(pathIndex);
   })
-}
+// }
 
 
 app.listen(port, () => {
