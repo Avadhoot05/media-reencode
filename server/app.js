@@ -22,10 +22,15 @@ app.use('/', router);
 const port =  process.env.PORT || 3000;
 
 if (process.env.NODE_ENV == "production") {
-  app.use(express.static(path.join(__dirname, "client" , "build")));
+	console.log("prod env detected");
+	const pathBuild = path.join(__dirname, "client" , "build");
+	console.log("path build ", pathBuild);
+  	app.use(express.static(pathBuild));
 
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+	const pathIndex = path.join(__dirname, "client", "build", "index.html"); 
+	console.log("index path ", pathIndex);
+    res.sendFile(pathIndex);
   })
 }
 
