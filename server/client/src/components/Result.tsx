@@ -1,8 +1,9 @@
 import React from 'react';
-import { ACTION, BACKEND_URI } from '../constants';
+import { ACTION } from '../constants';
 import { LinearProgress, Typography, Button, Box } from '@mui/material';
 import { saveAs } from 'file-saver';
 import { MdOutlineFileDownload } from "react-icons/md";
+import { baseUrl } from 'src/utils';
 
 interface Props {
     percent: number, 
@@ -14,7 +15,7 @@ function Result(props : Props)
 {
     let {percent, strVideoPath, action} = props;
     const HandleDownload = ( e: any ) : void => {
-	    saveAs(BACKEND_URI + strVideoPath, "video");
+	    saveAs(`${baseUrl}/${strVideoPath}`, "video");
     }
 
     percent = isNaN(percent) ? 0 : percent;
