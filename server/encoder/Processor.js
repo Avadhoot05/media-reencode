@@ -1,4 +1,6 @@
 const Encoder = require("./Encoder.js");
+const S3Service = require("../BucketService/S3Service.js");
+const BucketManager = require("../controller/BucketManager.js");
 
 class Job
 {
@@ -47,6 +49,7 @@ class Processor
         this.queue = [];
         this.bProcessing = false;
         this.encoder = null;
+        this.bucketManager = null;
         this.Init();
     }
 
@@ -56,6 +59,7 @@ class Processor
     Init()
     {
         this.encoder = new Encoder();
+        this.bucketManager = new BucketManager(new S3Service());
     }
 
     /**
@@ -104,6 +108,8 @@ class Processor
                     "bSuccess": true,
                     "strOutputFilePath": res["strOutputFilePath"]
                 };
+
+
                
             }
 

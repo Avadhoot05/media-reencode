@@ -26,7 +26,8 @@
     "start": "react-scripts start",
     "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:coverage": "react-scripts test --env=jsdom --watchAll=false --coverage"
   },
   "eslintConfig": {
     "extends": [
