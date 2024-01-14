@@ -17,8 +17,21 @@ const ACTION = Object.freeze({
     COMPRESS: 4
 });
 
+const INTERVAL_CLEAN_FILE_MS = 15*60*1000;//15mins
+const INTERVAL_CLEAN_FILE_MS_DEV = 1000;//15Sec
+
+const FILE_AGE_TO_DELETE = 30;//30min
+const FILE_AGE_TO_DELETE_DEV = 1;//1min
+
+const DOWNLOAD_LINK_EXPIRY = 15*60; 
+
+
+
+
 module.exports = {
     routes, 
     MEDIA_NAME_PREFIX, 
-    mapFn, ACTION
+    mapFn, ACTION, INTERVAL_CLEAN_FILE_MS, INTERVAL_CLEAN_FILE_MS_DEV,
+    FILE_AGE_TO_DELETE, FILE_AGE_TO_DELETE_DEV, DOWNLOAD_LINK_EXPIRY
 };
+

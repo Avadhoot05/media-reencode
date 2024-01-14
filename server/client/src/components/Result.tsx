@@ -15,7 +15,7 @@ function Result(props : Props)
 {
     let {percent, strVideoPath, action} = props;
     const HandleDownload = ( e: any ) : void => {
-	    saveAs(`${baseUrl}/${strVideoPath}`, "video");
+	    saveAs(strVideoPath, "video");
     }
 
     percent = isNaN(percent) ? 0 : percent;

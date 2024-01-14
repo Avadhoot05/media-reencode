@@ -1,6 +1,8 @@
 const Encoder = require("./Encoder.js");
 const S3Service = require("../BucketService/S3Service.js");
 const BucketManager = require("../controller/BucketManager.js");
+const FileCleaner = require("../Utils/FileCleaner.js");
+const path = require('path');
 
 class Job
 {
@@ -50,7 +52,15 @@ class Processor
         this.bProcessing = false;
         this.encoder = null;
         this.bucketManager = null;
+        /**@type {FileCleaner}*/
+        this.fileCleaner = null;
         this.Init();
+    }
+
+
+    SetFileCleaner(fileCleaner)
+    {
+        this.fileCleaner = fileCleaner;
     }
 
     /**
@@ -88,39 +98,61 @@ class Processor
         this.queue.splice(0, 1);
         this.bProcessing = true;
         let connection = job.GetConnection();
+
+        const onError = () => {
+            const resp = {
+                "type": "reencodeResponse",
+                "bSuccess": false,
+            }  
+
+            //send packet via conn
+            connection.send(JSON.stringify(resp));
+            this.ProcessJobs();
+        }
+
+
         this.encoder.Encode(job, (res, err) => {
             this.bProcessing = false;
 
-            let resp;
             if(err)
-            {
-                console.log("error" , err,  job.GetFileName());
-                resp = {
-                    "type": "reencodeResponse",
-                    "bSuccess": false,
-                }  
-            }
+                onError();
             else
             {
-                console.log("Done" ,  res);
-                resp = {
-                    "type": "reencodeResponse", 
-                    "bSuccess": true,
-                    "strOutputFilePath": res["strOutputFilePath"]
-                };
+                this.bucketManager.Upload(res["strOutputFilePath"], res["strFileNameWithFormat"], (uploadRes, uploadErr)=>{
+                    if(uploadErr)
+                        onError();
+                    else
+                    {
+                        //delete local reencoded file
+                        let strReencodedFilePath = path.join('./public', 'reencoded', res["strFileNameWithFormat"]);        
+                        this.fileCleaner.DeleteFile(strReencodedFilePath);
 
+                        this.bucketManager.Get("reencoded/"+res["strFileNameWithFormat"], (getRes, getErr)=>{
+                            if(getErr)
+                                onError();
+                            else
+                            {
+                                const resp = {
+                                    "type": "reencodeResponse", 
+                                    "bSuccess": true,
+                                    "strOutputFilePath": getRes["strOutputFilePath"],//aws signed url
+                                };
 
-               
+                                connection.send(JSON.stringify(resp));
+                                this.ProcessJobs();
+                            }
+                        });
+                    }
+                })
             }
 
-             //send packet via conn
-            connection.send(JSON.stringify(resp));
-            this.ProcessJobs();
-
+            let fileNameWithOriginalFormat = job.GetFileNameWithOriginalFormat();
+            let strUploadedFilePath = path.join('./public', 'uploaded', fileNameWithOriginalFormat);        
+            this.fileCleaner.DeleteFile(strUploadedFilePath);
         }, 
         
         (percent) => {
-            let resp = {
+            const resp = {
                 "type": "reencodeProgress", 
                 "percent": percent,
             };

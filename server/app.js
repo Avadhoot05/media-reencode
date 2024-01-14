@@ -7,6 +7,7 @@ const webSocket = require("websocket");
 const router = require("./routes.js");
 const path = require('path');
 const {Job, Processor} = require("./encoder/Processor.js");
+const FileCleaner = require("./Utils/FileCleaner.js");
 
 
 const app = express();
@@ -21,7 +22,7 @@ app.use('/', router);
 
 const port =  process.env.PORT || 3000;
 
-// if (process.env.NODE_ENV == "production") {
+if (process.env.NODE_ENV == "production") {
 	console.log("prod env detected");
 	const pathBuild = path.join(__dirname, "client" , "build");
 	console.log("path build ", pathBuild);
@@ -32,7 +33,7 @@ const port =  process.env.PORT || 3000;
 	console.log("index path ", pathIndex);
     res.sendFile(pathIndex);
   })
-// }
+}
 
 
 app.listen(port, () => {
@@ -50,7 +51,14 @@ const wsServer = new webSocket.server({
 	httpServer: server
 });
 
-let processor = new Processor();
+const fileCleaner = new FileCleaner();
+fileCleaner.Start();
+
+const processor = new Processor();
+processor.SetFileCleaner(fileCleaner);
+
+
+
 
 
 

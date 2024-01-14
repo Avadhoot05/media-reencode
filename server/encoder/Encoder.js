@@ -72,7 +72,8 @@ class Encoder
         })
         .on("end", function(){
             onComplete({
-                "strOutputFilePath": strOutputFilePath
+                "strOutputFilePath": strOutputFilePath, 
+                "strFileNameWithFormat": fileNameWithOriginalFormat
             }, null);
         })
         .run();
@@ -109,7 +110,8 @@ class Encoder
         })
         .on("end", function(){
             onComplete({
-                "strOutputFilePath": strOutputFilePath
+                "strOutputFilePath": strOutputFilePath,
+                "strFileNameWithFormat": fileNameWithOriginalFormat
             }, null);
         })
         .run();
@@ -148,7 +150,8 @@ class Encoder
         })
         .on("end", function(){
             onComplete({
-                "strOutputFilePath": strOutputFilePath
+                "strOutputFilePath": strOutputFilePath,
+                "strFileNameWithFormat": fileNameWithNewFormat
             }, null);
         })
         .run();
@@ -188,7 +191,8 @@ class Encoder
         })
         .on("end", function(){
             onComplete({
-                "strOutputFilePath": strOutputFilePath
+                "strOutputFilePath": strOutputFilePath,
+                "strFileNameWithFormat": fileNameWithOriginalFormat
             }, null);
         })
         .run();
