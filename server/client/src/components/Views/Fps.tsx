@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent } from 'react'
+import React, { useEffect, useState, ChangeEvent, useContext } from 'react'
 import FileUpload from '../FileUpload'
 import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,13 +8,14 @@ import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
 import { baseUrl } from 'src/utils';
-
+import { WS } from "../../contexts/WSContext";
 interface IWsMessage {
     data : string
 }
 
-function Fps({wsClient}) {
+function Fps() {
 
+    const wsClient : any = useContext(WS);
     const [fps, setFps] = useState<string>('');
     const [strErrorText, setErrorText] = useState<string>('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);

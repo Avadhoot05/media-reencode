@@ -1,33 +1,21 @@
 import './App.css';
-import React, { useEffect, lazy } from 'react';
-import { w3cwebsocket as W3CWebSocket } from "websocket";
+import React, { lazy } from 'react';
 
 import SelectionNav from './components/Nav/SelectionNav';
 import { ToastContainer, Slide } from 'react-toastify';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Footer from './components/Footer';
-import { wsUrl } from './utils';
 
 const Compress = lazy(() => import('./components/Views/Compress'));
 const Resolution = lazy(() => import('./components/Views/Resolution'));
 const Format = lazy(()=> import('./components/Views/Format'));
 const Fps = lazy(() => import('./components/Views/Fps')); 
 
-const client = new W3CWebSocket(wsUrl);
 
-function App() {
-	//ws
-	useEffect(function()
-  	{
-		client.onopen = () => {
-			console.log('WebSocket Client Connected');
-		};
-	}, []);
-    
+function App() {    
   return (
     <div className="App" >
-		{/* <WSHandler/> */}
 		<ToastContainer 
             position="top-center"
             autoClose={2000}
@@ -45,10 +33,10 @@ function App() {
 			<Router basename="/">
 				<Routes>
 					<Route path="/" element={<SelectionNav/>}></Route>
-					<Route path="/fps" element={<Fps wsClient = {client}/>}></Route>
-					<Route path="/format" element={<Format wsClient = {client}/>}></Route>
-					<Route path="/resolution" element={<Resolution wsClient = {client}/>}></Route>
-					<Route path="/compress" element={<Compress wsClient = {client}/>}></Route>
+					<Route path="/fps" element={<Fps/>}></Route>
+					<Route path="/format" element={<Format/>}></Route>
+					<Route path="/resolution" element={<Resolution/>}></Route>
+					<Route path="/compress" element={<Compress/>}></Route>
 				</Routes >
 			
 				<Footer/>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, ChangeEvent } from 'react'
-import FileUpload from '../FileUpload'
+import React, { useEffect, useState, ChangeEvent, useContext } from 'react';
+import FileUpload from '../FileUpload';
 import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Box} from '@mui/material';
@@ -10,13 +10,17 @@ import { ACTION, GetFileExt, formDataConfig } from '../../constants';
 import Result from '../Result';
 import PageHeading from '../PageHeading';
 import { baseUrl } from 'src/utils';
+import { WS } from "../../contexts/WSContext";
 
 interface IWsMessage {
     data : string
 }
 
 //3gp-0, mp4-1, mov-1, flv-1, mkv-1, avi, webm-0, 
-function Format({wsClient}) {
+function Format() {
+
+    const wsClient : any = useContext(WS);
+
     const arrFormat : Array<object> = [/*{1: '3gp'}*/ , {2: 'mp4'}, {3: 'mov'}, {4: 'flv'},{5: 'mkv'},{6: 'avi'}, /*{7: 'webm'}*/];
 
     const [selectedFormat, setSelectedFormat] = useState<string>('');

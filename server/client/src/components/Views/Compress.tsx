@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent, ReactElement } from 'react';
+import React, { useEffect, useState, ChangeEvent, ReactElement, useContext } from 'react';
 import FileUpload from '../FileUpload';
 import usePost from '../Hooks/usePost';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,11 +11,17 @@ import PageHeading from '../PageHeading';
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { baseUrl } from 'src/utils';
 
+import { WS } from "../../contexts/WSContext";
+
+
 interface IWsMessage {
     data : string
 }
 
-function Compress({wsClient}) : ReactElement {
+function Compress() : ReactElement {
+    
+    const wsClient : any = useContext(WS);
+
     const [compressValue, setCompressValue] = useState<number>(20);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [completionPercent, setCompletionPercent] = useState<number>(0);
