@@ -139,6 +139,7 @@ class Processor
                                 };
 
                                 connection.send(JSON.stringify(resp));
+                                this.fileCleaner.Start();
                                 this.ProcessJobs();
                             }
                         });

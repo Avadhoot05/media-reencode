@@ -4,18 +4,19 @@ const {getSignedUrl} = require("@aws-sdk/s3-request-presigner");
 const fs = require("fs");
 const path = require('path');
 const { DOWNLOAD_LINK_EXPIRY } = require("../constant");
+const { awsS3ClientCreator } = require("../Singleton/AWSS3ClientCreator");
 
 class S3Service
 {
     constructor()
     {
-        this.s3Client = new S3Client({
-            "region": "ap-south-1", 
-            "credentials": {
-                "accessKeyId": process.env.AWS_CONVERTZILLA_NODE_USER_ACCESS_KEY,
-                "secretAccessKey": process.env.AWS_CONVERTZILLA_NODE_USER_SECRET_ACCESS
-            }
-        })
+        // this.s3Client = new S3Client({
+        //     "region": "ap-south-1", 
+        //     "credentials": {
+        //         "accessKeyId": process.env.AWS_CONVERTZILLA_NODE_USER_ACCESS_KEY,
+        //         "secretAccessKey": process.env.AWS_CONVERTZILLA_NODE_USER_SECRET_ACCESS
+        //     }
+        // })
     }
 
     
@@ -36,7 +37,7 @@ class S3Service
                 return;
             }            
             new Upload({
-                client: self.s3Client,
+                client: awsS3ClientCreator.GetInstance(),
                 params: {
                     Bucket: process.env.S3BUCKET,
                     Key: "reencoded/"+strFileName,
@@ -68,7 +69,7 @@ class S3Service
             Key: strFilePathOnS3
         });
 
-        getSignedUrl(this.s3Client, cmd, { expiresIn: DOWNLOAD_LINK_EXPIRY })
+        getSignedUrl(awsS3ClientCreator.GetInstance(), cmd, { expiresIn: DOWNLOAD_LINK_EXPIRY })
         .then(url => {
             onComplete({"strOutputFilePath": url}, null);
         })
