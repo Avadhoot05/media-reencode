@@ -20,7 +20,7 @@ const ACTION = Object.freeze({
 const INTERVAL_CLEAN_FILE_MS = 24*60*60*1000;//24hrs
 const INTERVAL_CLEAN_FILE_MS_DEV = 15*1000;//15Sec
 
-const FILE_AGE_TO_DELETE = 60;//30min
+const FILE_AGE_TO_DELETE = 60;//60min
 const FILE_AGE_TO_DELETE_DEV = 1;//1min
 
 const DOWNLOAD_LINK_EXPIRY = 15*60; 
